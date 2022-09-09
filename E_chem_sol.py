@@ -18,6 +18,45 @@ def fig_chart():
     fig.show()
 
 
+def create_percent_t():
+    con = sqlite3.connect('e_chem.db')
+    cur = con.cursor()
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS bathes_percents as 
+        SELECT 
+            bath_name,
+            run,
+            sub1/sum*100.0 sub1,
+            sub2/sum*100.0 sub2,
+            sub3/sum*100.0 sub3,
+            sub4/sum*100.0 sub4,
+            sub5/sum*100.0 sub5,
+            sub6/sum*100.0 sub6,
+            sub7/sum*100.0 sub7,
+            sub8/sum*100.0 sub8,
+            sub9/sum*100.0 sub9,
+            sub10/sum*100.0 sub10,
+            sub11/sum*100.0 sub11,
+            sub12/sum*100.0 sub12,
+            sub13/sum*100.0 sub13,
+            sub14/sum*100.0 sub14,
+            sub15/sum*100.0 sub15,
+            sub16/sum*100.0 sub16,
+            sub17/sum*100.0 sub17,
+            sub18/sum*100.0 sub18,
+            sub19/sum*100.0 sub19,
+            sub20/sum*100.0 sub20,
+            sub21/sum*100.0 sub21,
+            sub22/sum*100.0 sub22,
+            sub23/sum*100.0 sub23,
+            sub24/sum*100.0 sub24,
+            sub25/sum*100.0 sub25
+        FROM bathes
+        """)
+    con.commit()
+    con.close()
+
+
 class Bath:
     def __init__(self, bath_name, bath_volume, bath_temp, transfer, cascade):
         self.bath_name = bath_name
@@ -570,13 +609,16 @@ def main():
             bath_lst[i].save_drains()
         print("Run", run)
 
-    con = sqlite3.connect('e_chem.db')
-    df1 = pd.read_sql('SELECT * FROM bathes', con)
-    df2 = pd.read_sql('SELECT * FROM dosing', con)
-    df3 = pd.read_sql('SELECT * FROM drains', con)
-    df1.to_csv(r'c:\Шелопин\ElectroPlating\bath_conc.csv', index=False)
-    df2.to_csv(r'c:\Шелопин\ElectroPlating\bath_dosing.csv', index=False)
-    df3.to_csv(r'c:\Шелопин\ElectroPlating\bath_drains.csv', index=False)
+    drop_t('bathes_percents')
+    create_percent_t()
+
+    # con = sqlite3.connect('e_chem.db')
+    # df1 = pd.read_sql('SELECT * FROM bathes', con)
+    # df2 = pd.read_sql('SELECT * FROM dosing', con)
+    # df3 = pd.read_sql('SELECT * FROM drains', con)
+    # df1.to_csv(r'c:\Шелопин\ElectroPlating\bath_conc.csv', index=False)
+    # df2.to_csv(r'c:\Шелопин\ElectroPlating\bath_dosing.csv', index=False)
+    # df3.to_csv(r'c:\Шелопин\ElectroPlating\bath_drains.csv', index=False)
 
 
 if __name__ == "__main__":
